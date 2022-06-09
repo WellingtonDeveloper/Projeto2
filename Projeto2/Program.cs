@@ -44,6 +44,7 @@ namespace Projeto2
                         Listar();
                         break;
                     case Menu.Remover:
+                        Remover();
                         break;
                     case Menu.Sair:
                         escolheuSair = true;
@@ -99,6 +100,23 @@ namespace Projeto2
 
             Console.WriteLine("Aperte enter para sair.");
             Console.ReadLine();
+        }
+        static void Remover()
+        {
+            Listar();
+            Console.WriteLine("Digite o ID do cliente que deseja remover: ");//Utilizando remover por ID, poderia utilizar a remoção por outros dados.
+            int id = int.Parse(Console.ReadLine());
+
+            if(id > 0 && id < clientes.Count)
+            {
+                clientes.RemoveAt(id);
+                Salvar();
+            }
+            else
+            {
+                Console.WriteLine("Id dgitado é inválido!");
+                Console.ReadLine();
+            }
         }
         static void Salvar()
         {
