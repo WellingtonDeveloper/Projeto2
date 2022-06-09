@@ -35,6 +35,7 @@ namespace Projeto2
                         Adicionar();
                         break;
                     case Menu.Listagem:
+                        Listagem();
                         break;
                     case Menu.Remover:
                         break;
@@ -61,6 +62,35 @@ namespace Projeto2
             clientes.Add(cliente);
 
             Console.WriteLine("Cadastro concluido, aperte enter para sair.");
+            Console.ReadLine();
+        }
+
+        static void Listagem()
+        {
+            if (clientes.Count > 0) //Se existe pelo menos um cadastro de cliente
+            {
+                Console.WriteLine("Lista de clientes");
+
+                int i = 0;
+
+                foreach (Cliente cliente in clientes)
+                {
+                    Console.WriteLine($"ID: {i}");
+                    Console.WriteLine($"Nome: {cliente.nome}");
+                    Console.WriteLine($"E-mail: {cliente.email}");
+                    Console.WriteLine($"CPF: {cliente.cpf}");
+                    Console.WriteLine("====================================================");
+
+                    i++;
+
+                }
+            }
+            else
+            {
+                Console.WriteLine("Nenhum cliente cadastrado!");
+            }
+
+            Console.WriteLine("Aperte enter para sair.");
             Console.ReadLine();
         }
     }
