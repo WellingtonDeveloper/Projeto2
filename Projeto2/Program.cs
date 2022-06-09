@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
+
+
 
 namespace Projeto2
 {
@@ -17,15 +22,16 @@ namespace Projeto2
         }
 
         static List<Cliente> clientes = new List<Cliente>();
-        enum Menu { Listagem = 1, Adicionar = 2, Remover = 3, Sair = 4}
+        enum Menu { Listar = 1, Adicionar = 2, Remover = 3, Sair = 4}
         static void Main(string[] args)
         {
+            Carregar();
             bool escolheuSair = false;
             while (!escolheuSair)
             {
 
                 Console.WriteLine("Sistema de clientes - Bem vindo!");
-                Console.WriteLine("1 - Listagem\n2 - Adicionar\n3 - Remover\n4 - Sair");
+                Console.WriteLine("1 - Listar\n2 - Adicionar\n3 - Remover\n4 - Sair");
                 int intOp = int.Parse(Console.ReadLine());
                 Menu opcao = (Menu)intOp;
 
@@ -34,8 +40,8 @@ namespace Projeto2
                     case Menu.Adicionar:
                         Adicionar();
                         break;
-                    case Menu.Listagem:
-                        Listagem();
+                    case Menu.Listar:
+                        Listar();
                         break;
                     case Menu.Remover:
                         break;
@@ -60,12 +66,13 @@ namespace Projeto2
             cliente.cpf = Console.ReadLine();
 
             clientes.Add(cliente);
+            Salvar();
 
             Console.WriteLine("Cadastro concluido, aperte enter para sair.");
             Console.ReadLine();
         }
 
-        static void Listagem()
+        static void Listar()
         {
             if (clientes.Count > 0) //Se existe pelo menos um cadastro de cliente
             {
@@ -92,6 +99,39 @@ namespace Projeto2
 
             Console.WriteLine("Aperte enter para sair.");
             Console.ReadLine();
+        }
+        static void Salvar()
+        {
+            FileStream stream = new FileStream("clientes.dat", FileMode.OpenOrCreate);
+            BinaryFormatter enconder = new BinaryFormatter();
+
+            enconder.Serialize(stream, clientes);
+
+            stream.Close();
+        }
+        static void Carregar()
+        {
+            FileStream stream = new FileStream("clientes.dat", FileMode.OpenOrCreate);
+
+            try
+            {               
+                BinaryFormatter enconder = new BinaryFormatter();
+
+                //enconder.Serialize(stream, clientes);
+                clientes = (List<Cliente>)enconder.Deserialize(stream);
+
+                if(clientes == null)
+                {
+                    clientes = new List<Cliente>();
+                }
+            }
+            catch(Exception e)
+            {
+                clientes = new List<Cliente>();
+            }
+
+            stream.Close();
+
         }
     }
 }
